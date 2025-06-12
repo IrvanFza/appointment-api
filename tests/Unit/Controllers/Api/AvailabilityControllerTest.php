@@ -55,7 +55,7 @@ class AvailabilityControllerTest extends TestCase
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->getJson('/api/user/availabilities');
+        ])->getJson('/api/availabilities');
 
         $response->assertStatus(200);
         $response->assertJsonCount(2, 'data');
@@ -75,7 +75,7 @@ class AvailabilityControllerTest extends TestCase
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->postJson('/api/user/availabilities', $data);
+        ])->postJson('/api/availabilities', $data);
 
         $response->assertStatus(201);
         $response->assertJsonFragment([
@@ -101,7 +101,7 @@ class AvailabilityControllerTest extends TestCase
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->postJson('/api/user/availabilities', $data);
+        ])->postJson('/api/availabilities', $data);
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['day_of_week', 'end_time']);
@@ -118,7 +118,7 @@ class AvailabilityControllerTest extends TestCase
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->getJson('/api/user/availabilities/' . $availability->id);
+        ])->getJson('/api/availabilities/' . $availability->id);
 
         $response->assertStatus(200);
         $response->assertJsonFragment([
@@ -136,7 +136,7 @@ class AvailabilityControllerTest extends TestCase
         
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->getJson('/api/user/availabilities/' . $nonexistentId);
+        ])->getJson('/api/availabilities/' . $nonexistentId);
 
         $response->assertStatus(404);
     }
@@ -153,7 +153,7 @@ class AvailabilityControllerTest extends TestCase
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->getJson('/api/user/availabilities/' . $availability->id);
+        ])->getJson('/api/availabilities/' . $availability->id);
 
         $response->assertStatus(401);
     }
@@ -175,7 +175,7 @@ class AvailabilityControllerTest extends TestCase
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->putJson('/api/user/availabilities/' . $availability->id, $data);
+        ])->putJson('/api/availabilities/' . $availability->id, $data);
 
         $response->assertStatus(200);
         $response->assertJsonFragment([
@@ -203,7 +203,7 @@ class AvailabilityControllerTest extends TestCase
         // Update only the end_time
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->putJson('/api/user/availabilities/' . $availability->id, [
+        ])->putJson('/api/availabilities/' . $availability->id, [
             'end_time' => '18:00',
         ]);
 
@@ -218,7 +218,7 @@ class AvailabilityControllerTest extends TestCase
         // Update only the start_time
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->putJson('/api/user/availabilities/' . $availability->id, [
+        ])->putJson('/api/availabilities/' . $availability->id, [
             'start_time' => '10:00',
         ]);
 
@@ -233,7 +233,7 @@ class AvailabilityControllerTest extends TestCase
         // Update only the day_of_week
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->putJson('/api/user/availabilities/' . $availability->id, [
+        ])->putJson('/api/availabilities/' . $availability->id, [
             'day_of_week' => 6,
         ]);
 
@@ -264,7 +264,7 @@ class AvailabilityControllerTest extends TestCase
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->putJson('/api/user/availabilities/' . $availability->id, $data);
+        ])->putJson('/api/availabilities/' . $availability->id, $data);
 
         $response->assertStatus(401);
     }
@@ -280,7 +280,7 @@ class AvailabilityControllerTest extends TestCase
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->deleteJson('/api/user/availabilities/' . $availability->id);
+        ])->deleteJson('/api/availabilities/' . $availability->id);
 
         $response->assertStatus(200);
         $this->assertDatabaseMissing('availabilities', [
@@ -300,7 +300,7 @@ class AvailabilityControllerTest extends TestCase
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->deleteJson('/api/user/availabilities/' . $availability->id);
+        ])->deleteJson('/api/availabilities/' . $availability->id);
 
         $response->assertStatus(401);
         $this->assertDatabaseHas('availabilities', [
