@@ -24,3 +24,7 @@ Route::prefix('auth')->group(function () {
         Route::post('refresh', [AuthController::class, 'refresh']);
     });
 });
+
+Route::prefix('user')->middleware('auth:api')->group(function () {
+  Route::get('profile', [UserController::class, 'profile']);
+}); 
