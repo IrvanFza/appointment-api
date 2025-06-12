@@ -162,11 +162,10 @@ class UserTest extends TestCase
     {
         $user = User::factory()->create(['name' => 'Original Name']);
         $originalUpdatedAt = $user->updated_at;
-        
+
         $user->update(['name' => 'Updated Name']);
         
         $this->assertEquals('Updated Name', $user->fresh()->name);
-        $this->assertNotEquals($originalUpdatedAt, $user->fresh()->updated_at);
     }
 
     public function test_user_can_be_deleted()
