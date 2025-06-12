@@ -12,7 +12,7 @@ class UserPreferenceTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_user_preference_has_correct_fillable_attributes()
+    public function test_user_preference_has_correct_fillable_attributes(): void
     {
         $preference = new UserPreference();
         $expected = [
@@ -28,7 +28,7 @@ class UserPreferenceTest extends TestCase
         $this->assertEquals($expected, $preference->getFillable());
     }
 
-    public function test_user_preference_has_correct_casts()
+    public function test_user_preference_has_correct_casts(): void
     {
         $preference = new UserPreference();
         $casts = $preference->getCasts();
@@ -45,7 +45,7 @@ class UserPreferenceTest extends TestCase
         $this->assertEquals('datetime:H:i:s', $casts['lunch_break_end_time']);
     }
 
-    public function test_user_preference_uses_uuid_as_primary_key()
+    public function test_user_preference_uses_uuid_as_primary_key(): void
     {
         $preference = new UserPreference();
         
@@ -53,7 +53,7 @@ class UserPreferenceTest extends TestCase
         $this->assertEquals('string', $preference->getKeyType());
     }
 
-    public function test_user_preference_generates_uuid_on_creation()
+    public function test_user_preference_generates_uuid_on_creation(): void
     {
         $user = User::factory()->create();
         
@@ -67,7 +67,7 @@ class UserPreferenceTest extends TestCase
         $this->assertIsString($preference->id);
     }
 
-    public function test_user_preference_belongs_to_user()
+    public function test_user_preference_belongs_to_user(): void
     {
         $user = User::factory()->create();
         $preference = UserPreference::factory()->create(['user_id' => $user->id]);
@@ -76,7 +76,7 @@ class UserPreferenceTest extends TestCase
         $this->assertEquals($user->id, $preference->user->id);
     }
 
-    public function test_user_has_one_preference()
+    public function test_user_has_one_preference(): void
     {
         $user = User::factory()->create();
         $preference = UserPreference::factory()->create(['user_id' => $user->id]);
@@ -85,7 +85,7 @@ class UserPreferenceTest extends TestCase
         $this->assertEquals($preference->id, $user->preference->id);
     }
 
-    public function test_user_preference_can_be_created_with_factory()
+    public function test_user_preference_can_be_created_with_factory(): void
     {
         $preference = UserPreference::factory()->create();
         
@@ -98,7 +98,7 @@ class UserPreferenceTest extends TestCase
         $this->assertNotNull($preference->timezone);
     }
 
-    public function test_user_preference_can_be_created_with_specific_attributes()
+    public function test_user_preference_can_be_created_with_specific_attributes(): void
     {
         $user = User::factory()->create();
         $preferenceData = [
@@ -122,7 +122,7 @@ class UserPreferenceTest extends TestCase
         $this->assertEquals($preferenceData['timezone'], $preference->timezone);
     }
 
-    public function test_user_preference_validation_rules()
+    public function test_user_preference_validation_rules(): void
     {
         $rules = UserPreference::rules();
         
@@ -154,7 +154,7 @@ class UserPreferenceTest extends TestCase
         $this->assertStringContainsString('timezone', $rules['timezone']);
     }
 
-    public function test_user_preference_validation_passes_with_valid_data()
+    public function test_user_preference_validation_passes_with_valid_data(): void
     {
         $user = User::factory()->create();
         $data = [
@@ -172,7 +172,7 @@ class UserPreferenceTest extends TestCase
         $this->assertTrue($validator->passes());
     }
 
-    public function test_user_preference_validation_fails_with_invalid_user_id()
+    public function test_user_preference_validation_fails_with_invalid_user_id(): void
     {
         $data = [
             'user_id' => 'invalid-uuid',
@@ -185,7 +185,7 @@ class UserPreferenceTest extends TestCase
         $this->assertArrayHasKey('user_id', $validator->errors()->toArray());
     }
 
-    public function test_user_preference_validation_fails_with_nonexistent_user()
+    public function test_user_preference_validation_fails_with_nonexistent_user(): void
     {
         $data = [
             'user_id' => '123e4567-e89b-12d3-a456-426614174000',
@@ -198,7 +198,7 @@ class UserPreferenceTest extends TestCase
         $this->assertArrayHasKey('user_id', $validator->errors()->toArray());
     }
 
-    public function test_user_preference_validation_fails_with_duplicate_user_id()
+    public function test_user_preference_validation_fails_with_duplicate_user_id(): void
     {
         $user = User::factory()->create();
         UserPreference::factory()->create(['user_id' => $user->id]);
@@ -214,7 +214,7 @@ class UserPreferenceTest extends TestCase
         $this->assertArrayHasKey('user_id', $validator->errors()->toArray());
     }
 
-    public function test_user_preference_validation_fails_with_invalid_time_format()
+    public function test_user_preference_validation_fails_with_invalid_time_format(): void
     {
         $user = User::factory()->create();
         $data = [
@@ -231,7 +231,7 @@ class UserPreferenceTest extends TestCase
         $this->assertArrayHasKey('lunch_break_end_time', $validator->errors()->toArray());
     }
 
-    public function test_user_preference_validation_fails_when_end_time_before_start_time()
+    public function test_user_preference_validation_fails_when_end_time_before_start_time(): void
     {
         $user = User::factory()->create();
         $data = [
@@ -247,7 +247,7 @@ class UserPreferenceTest extends TestCase
         $this->assertArrayHasKey('lunch_break_end_time', $validator->errors()->toArray());
     }
 
-    public function test_user_preference_validation_fails_with_invalid_timezone()
+    public function test_user_preference_validation_fails_with_invalid_timezone(): void
     {
         $user = User::factory()->create();
         $data = [
@@ -261,7 +261,7 @@ class UserPreferenceTest extends TestCase
         $this->assertArrayHasKey('timezone', $validator->errors()->toArray());
     }
 
-    public function test_user_preference_update_rules_allow_same_user_id()
+    public function test_user_preference_update_rules_allow_same_user_id(): void
     {
         $user = User::factory()->create();
         $preference = UserPreference::factory()->create(['user_id' => $user->id]);
@@ -276,7 +276,7 @@ class UserPreferenceTest extends TestCase
         $this->assertTrue($validator->passes());
     }
 
-    public function test_user_preference_can_be_updated()
+    public function test_user_preference_can_be_updated(): void
     {
         $preference = UserPreference::factory()->create([
             'is_available' => true,
@@ -292,7 +292,7 @@ class UserPreferenceTest extends TestCase
         $this->assertEquals('UTC', $preference->fresh()->timezone);
     }
 
-    public function test_user_preference_can_be_deleted()
+    public function test_user_preference_can_be_deleted(): void
     {
         $preference = UserPreference::factory()->create();
         $preferenceId = $preference->id;
@@ -302,7 +302,7 @@ class UserPreferenceTest extends TestCase
         $this->assertNull(UserPreference::find($preferenceId));
     }
 
-    public function test_user_preference_timestamps_are_working()
+    public function test_user_preference_timestamps_are_working(): void
     {
         $preference = UserPreference::factory()->create();
         
@@ -312,7 +312,7 @@ class UserPreferenceTest extends TestCase
         $this->assertInstanceOf(\Carbon\Carbon::class, $preference->updated_at);
     }
 
-    public function test_user_preference_factory_states()
+    public function test_user_preference_factory_states(): void
     {
         $availablePreference = UserPreference::factory()->available()->create();
         $this->assertTrue($availablePreference->is_available);
@@ -332,7 +332,7 @@ class UserPreferenceTest extends TestCase
         $this->assertTrue($blockingHolidays->block_public_holiday);
     }
 
-    public function test_user_preference_has_factory_trait()
+    public function test_user_preference_has_factory_trait(): void
     {
         $preference = new UserPreference();
         $traits = class_uses_recursive(UserPreference::class);
@@ -340,7 +340,7 @@ class UserPreferenceTest extends TestCase
         $this->assertContains(\Illuminate\Database\Eloquent\Factories\HasFactory::class, $traits);
     }
 
-    public function test_deleting_user_cascades_to_preference()
+    public function test_deleting_user_cascades_to_preference(): void
     {
         $user = User::factory()->create();
         $preference = UserPreference::factory()->create(['user_id' => $user->id]);

@@ -11,7 +11,7 @@ class UserControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_user_can_get_profile_with_token()
+    public function test_user_can_get_profile_with_token(): void
     {
         $user = User::create([
             'name' => 'Test User',
@@ -47,7 +47,7 @@ class UserControllerTest extends TestCase
                  ]);
     }
 
-    public function test_profile_access_without_token_returns_401()
+    public function test_profile_access_without_token_returns_401(): void
     {
         $response = $this->getJson('/api/user/profile');
 
@@ -57,7 +57,7 @@ class UserControllerTest extends TestCase
                  ]);
     }
 
-    public function test_profile_access_with_invalid_token_returns_401()
+    public function test_profile_access_with_invalid_token_returns_401(): void
     {
         $response = $this->withHeaders([
             'Authorization' => 'Bearer invalid_token_here',
@@ -69,7 +69,7 @@ class UserControllerTest extends TestCase
                  ]);
     }
 
-    public function test_profile_access_with_malformed_token_returns_401()
+    public function test_profile_access_with_malformed_token_returns_401(): void
     {
         $response = $this->withHeaders([
             'Authorization' => 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.malformed.token',
@@ -81,7 +81,7 @@ class UserControllerTest extends TestCase
                  ]);
     }
 
-    public function test_profile_access_with_expired_token_returns_401()
+    public function test_profile_access_with_expired_token_returns_401(): void
     {
         $user = User::create([
             'name' => 'Test User',

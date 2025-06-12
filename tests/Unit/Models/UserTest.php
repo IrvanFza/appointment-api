@@ -12,14 +12,14 @@ class UserTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_user_implements_jwt_subject_interface()
+    public function test_user_implements_jwt_subject_interface(): void
     {
         $user = new User();
         
         $this->assertInstanceOf(JWTSubject::class, $user);
     }
 
-    public function test_user_has_correct_fillable_attributes()
+    public function test_user_has_correct_fillable_attributes(): void
     {
         $user = new User();
         $expected = ['name', 'email', 'password'];
@@ -27,7 +27,7 @@ class UserTest extends TestCase
         $this->assertEquals($expected, $user->getFillable());
     }
 
-    public function test_user_has_correct_hidden_attributes()
+    public function test_user_has_correct_hidden_attributes(): void
     {
         $user = new User();
         $expected = ['password', 'remember_token'];
@@ -35,7 +35,7 @@ class UserTest extends TestCase
         $this->assertEquals($expected, $user->getHidden());
     }
 
-    public function test_user_has_correct_casts()
+    public function test_user_has_correct_casts(): void
     {
         $user = new User();
         $casts = $user->getCasts();
@@ -46,7 +46,7 @@ class UserTest extends TestCase
         $this->assertEquals('hashed', $casts['password']);
     }
 
-    public function test_user_uses_uuid_as_primary_key()
+    public function test_user_uses_uuid_as_primary_key(): void
     {
         $user = new User();
         
@@ -54,7 +54,7 @@ class UserTest extends TestCase
         $this->assertEquals('string', $user->getKeyType());
     }
 
-    public function test_user_generates_uuid_on_creation()
+    public function test_user_generates_uuid_on_creation(): void
     {
         $user = User::create([
             'name' => 'Test User',
@@ -66,7 +66,7 @@ class UserTest extends TestCase
         $this->assertIsString($user->id);
     }
 
-    public function test_user_id_is_not_assignable()
+    public function test_user_id_is_not_assignable(): void
     {
         $customUuid = '123e4567-e89b-12d3-a456-426614174000';
         
@@ -83,7 +83,7 @@ class UserTest extends TestCase
         $this->assertIsString($user->id);
     }
 
-    public function test_password_is_automatically_hashed()
+    public function test_password_is_automatically_hashed(): void
     {
         $plainPassword = 'password123';
         
@@ -97,14 +97,14 @@ class UserTest extends TestCase
         $this->assertTrue(Hash::check($plainPassword, $user->password));
     }
 
-    public function test_get_jwt_identifier_returns_user_id()
+    public function test_get_jwt_identifier_returns_user_id(): void
     {
         $user = User::factory()->create();
         
         $this->assertEquals($user->id, $user->getJWTIdentifier());
     }
 
-    public function test_get_jwt_custom_claims_returns_empty_array()
+    public function test_get_jwt_custom_claims_returns_empty_array(): void
     {
         $user = new User();
         
@@ -112,7 +112,7 @@ class UserTest extends TestCase
         $this->assertIsArray($user->getJWTCustomClaims());
     }
 
-    public function test_user_can_be_created_with_factory()
+    public function test_user_can_be_created_with_factory(): void
     {
         $user = User::factory()->create();
         
@@ -123,7 +123,7 @@ class UserTest extends TestCase
         $this->assertNotNull($user->password);
     }
 
-    public function test_user_can_be_created_with_specific_attributes()
+    public function test_user_can_be_created_with_specific_attributes(): void
     {
         $userData = [
             'name' => 'John Doe',
@@ -138,7 +138,7 @@ class UserTest extends TestCase
         $this->assertTrue(Hash::check($userData['password'], $user->password));
     }
 
-    public function test_user_email_must_be_unique()
+    public function test_user_email_must_be_unique(): void
     {
         $email = 'unique@example.com';
         
@@ -148,7 +148,7 @@ class UserTest extends TestCase
         User::factory()->create(['email' => $email]);
     }
 
-    public function test_user_timestamps_are_working()
+    public function test_user_timestamps_are_working(): void
     {
         $user = User::factory()->create();
         
@@ -158,7 +158,7 @@ class UserTest extends TestCase
         $this->assertInstanceOf(\Carbon\Carbon::class, $user->updated_at);
     }
 
-    public function test_user_can_be_updated()
+    public function test_user_can_be_updated(): void
     {
         $user = User::factory()->create(['name' => 'Original Name']);
         $originalUpdatedAt = $user->updated_at;
@@ -168,7 +168,7 @@ class UserTest extends TestCase
         $this->assertEquals('Updated Name', $user->fresh()->name);
     }
 
-    public function test_user_can_be_deleted()
+    public function test_user_can_be_deleted(): void
     {
         $user = User::factory()->create();
         $userId = $user->id;
@@ -178,7 +178,7 @@ class UserTest extends TestCase
         $this->assertNull(User::find($userId));
     }
 
-    public function test_user_has_notifiable_trait()
+    public function test_user_has_notifiable_trait(): void
     {
         $user = new User();
         $traits = class_uses_recursive(User::class);
@@ -186,7 +186,7 @@ class UserTest extends TestCase
         $this->assertContains(\Illuminate\Notifications\Notifiable::class, $traits);
     }
 
-    public function test_user_has_factory_trait()
+    public function test_user_has_factory_trait(): void
     {
         $user = new User();
         $traits = class_uses_recursive(User::class);
@@ -194,7 +194,7 @@ class UserTest extends TestCase
         $this->assertContains(\Illuminate\Database\Eloquent\Factories\HasFactory::class, $traits);
     }
 
-    public function test_user_has_one_preference_relationship()
+    public function test_user_has_one_preference_relationship(): void
     {
         $user = User::factory()->create();
         

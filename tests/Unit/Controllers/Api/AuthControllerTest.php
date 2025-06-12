@@ -11,7 +11,7 @@ class AuthControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_user_can_login_with_valid_credentials()
+    public function test_user_can_login_with_valid_credentials(): void
     {
         $user = User::create([
             'name' => 'Test User',
@@ -33,7 +33,7 @@ class AuthControllerTest extends TestCase
                  ]);
     }
 
-    public function test_user_cannot_login_with_invalid_credentials()
+    public function test_user_cannot_login_with_invalid_credentials(): void
     {
         $response = $this->postJson('/api/auth/login', [
             'email' => 'test@example.com',
@@ -47,7 +47,7 @@ class AuthControllerTest extends TestCase
                  ]);
     }
 
-    public function test_user_can_logout()
+    public function test_user_can_logout(): void
     {
         $user = User::create([
             'name' => 'Test User',
@@ -68,7 +68,7 @@ class AuthControllerTest extends TestCase
                  ]);
     }
 
-    public function test_logout_without_token_returns_401()
+    public function test_logout_without_token_returns_401(): void
     {
         $response = $this->postJson('/api/auth/logout');
 
@@ -78,7 +78,7 @@ class AuthControllerTest extends TestCase
                  ]);
     }
 
-    public function test_logout_with_invalid_token_returns_401()
+    public function test_logout_with_invalid_token_returns_401(): void
     {
         $response = $this->withHeaders([
             'Authorization' => 'Bearer invalid_token_here',

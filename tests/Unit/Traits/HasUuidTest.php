@@ -11,21 +11,21 @@ class HasUuidTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_trait_sets_incrementing_to_false()
+    public function test_trait_sets_incrementing_to_false(): void
     {
         $model = new TestModelWithUuid();
         
         $this->assertFalse($model->getIncrementing());
     }
 
-    public function test_trait_sets_key_type_to_string()
+    public function test_trait_sets_key_type_to_string(): void
     {
         $model = new TestModelWithUuid();
         
         $this->assertEquals('string', $model->getKeyType());
     }
 
-    public function test_trait_generates_uuid_on_creation()
+    public function test_trait_generates_uuid_on_creation(): void
     {
         $model = new TestModelWithUuid();
         $model->name = 'Test';
@@ -35,7 +35,7 @@ class HasUuidTest extends TestCase
         TestModelWithUuid::bootHasUuid();
         
         // Manually trigger the creating event callback
-        $callback = TestModelWithUuid::getEventDispatcher()->listen('eloquent.creating: ' . TestModelWithUuid::class, function ($model) {
+        $callback = TestModelWithUuid::getEventDispatcher()->listen('eloquent.creating: ' . TestModelWithUuid::class, function ($model): void {
             if (empty($model->id)) {
                 $model->id = (string) \Illuminate\Support\Str::uuid();
             }
@@ -53,7 +53,7 @@ class HasUuidTest extends TestCase
         $this->assertEquals(36, strlen($model->id)); // UUID length
     }
 
-    public function test_trait_does_not_override_existing_id()
+    public function test_trait_does_not_override_existing_id(): void
     {
         $model = new TestModelWithUuid();
         $existingId = 'existing-id';
@@ -67,7 +67,7 @@ class HasUuidTest extends TestCase
         $this->assertEquals($existingId, $model->id);
     }
 
-    public function test_trait_is_used_by_user_model()
+    public function test_trait_is_used_by_user_model(): void
     {
         $user = new \App\Models\User();
         $traits = class_uses_recursive(\App\Models\User::class);
@@ -75,7 +75,7 @@ class HasUuidTest extends TestCase
         $this->assertContains(HasUuid::class, $traits);
     }
 
-    public function test_trait_is_used_by_user_preference_model()
+    public function test_trait_is_used_by_user_preference_model(): void
     {
         $preference = new \App\Models\UserPreference();
         $traits = class_uses_recursive(\App\Models\UserPreference::class);
