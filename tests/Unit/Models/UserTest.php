@@ -193,4 +193,17 @@ class UserTest extends TestCase
         
         $this->assertContains(\Illuminate\Database\Eloquent\Factories\HasFactory::class, $traits);
     }
+
+    public function test_user_has_one_preference_relationship()
+    {
+        $user = User::factory()->create();
+        
+        $this->assertNull($user->preference);
+        
+        $preference = \App\Models\UserPreference::factory()->create(['user_id' => $user->id]);
+        
+        $user->refresh();
+        $this->assertInstanceOf(\App\Models\UserPreference::class, $user->preference);
+        $this->assertEquals($preference->id, $user->preference->id);
+    }
 } 

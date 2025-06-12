@@ -3,20 +3,17 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Str;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
-
-    // Disable default Laravel incrementing, since we're using UUIDs
-    public $incrementing = false;
-    protected $keyType = 'string';
+    use HasFactory, Notifiable, HasUuid;
 
     /**
      * The attributes that are mass assignable.
@@ -28,20 +25,6 @@ class User extends Authenticatable implements JWTSubject
         'email',
         'password',
     ];
-
-    /**
-     * Boot the model and add event listeners.
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            if (empty($model->id)) {
-                $model->id = (string) Str::uuid();
-            }
-        });
-    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -80,5 +63,13 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    /**
+     * Get the user's preference.
+     */
+    public function preference(): HasOne
+    {
+        return $this->hasOne(UserPreference::class);
     }
 }
