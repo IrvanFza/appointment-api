@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AvailabilityController;
+use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\UserPreferenceController;
 use Illuminate\Support\Facades\Route;
@@ -17,18 +18,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('auth')->group(function () {
-    Route::post('login', [AuthController::class, 'login']);
-    
-    Route::middleware('auth:api')->group(function () {
+Route::post('auth/login', [AuthController::class, 'login']);
+
+// All routes with authentication
+Route::middleware('auth:api')->group(function () {
+    // Auth routes
+    Route::prefix('auth')->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
         Route::post('refresh', [AuthController::class, 'refresh']);
     });
-});
 
-Route::prefix('user')->middleware('auth:api')->group(function () {
-    Route::get('profile', [UserController::class, 'profile']);
-    Route::get('preference', [UserPreferenceController::class, 'show']);
-    Route::put('preference', [UserPreferenceController::class, 'update']);
+    // User routes
+    Route::prefix('user')->group(function () {
+        Route::get('profile', [UserController::class, 'profile']);
+        Route::get('preference', [UserPreferenceController::class, 'show']);
+        Route::put('preference', [UserPreferenceController::class, 'update']);
+    });
+
+    // Resource routes
     Route::apiResource('availabilities', AvailabilityController::class);
-}); 
+    Route::apiResource('events', EventController::class);
+});

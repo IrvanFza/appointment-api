@@ -33,6 +33,8 @@ class Event extends Model
     protected $casts = [
         'duration_mins' => 'integer',
         'max_appointment_days' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     /**
