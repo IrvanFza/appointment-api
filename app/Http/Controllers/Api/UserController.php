@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
-
 class UserController extends BaseController
 {
     public function profile()
@@ -13,4 +11,4 @@ class UserController extends BaseController
             'User profile fetched successfully'
         );
     }
-} 
+}
