@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Feature\Api;
+namespace Tests\Unit\Controllers\Api;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
-class AuthTest extends TestCase
+class AuthControllerTest extends TestCase
 {
     use RefreshDatabase;
 
