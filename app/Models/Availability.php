@@ -35,6 +35,15 @@ class Availability extends Model
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array<int, string>
+     */
+    protected $appends = [
+        'day_string',
+    ];
+
+    /**
      * Get the validation rules for the model.
      *
      * @return array<string, mixed>
@@ -55,5 +64,23 @@ class Availability extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the string representation of the day of week.
+     */
+    public function getDayStringAttribute(): string
+    {
+        $days = [
+            0 => 'Sunday',
+            1 => 'Monday',
+            2 => 'Tuesday',
+            3 => 'Wednesday',
+            4 => 'Thursday',
+            5 => 'Friday',
+            6 => 'Saturday',
+        ];
+
+        return $days[$this->day_of_week] ?? 'Unknown';
     }
 } 
