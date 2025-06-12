@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\UserPreferenceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,5 +26,7 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::prefix('user')->middleware('auth:api')->group(function () {
-  Route::get('profile', [UserController::class, 'profile']);
+    Route::get('profile', [UserController::class, 'profile']);
+    Route::get('preference', [UserPreferenceController::class, 'show']);
+    Route::put('preference', [UserPreferenceController::class, 'update']);
 }); 

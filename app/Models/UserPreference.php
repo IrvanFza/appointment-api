@@ -69,8 +69,12 @@ class UserPreference extends Model
     public static function updateRules(string $id): array
     {
         $rules = self::rules();
-        $rules['user_id'] = 'required|uuid|exists:users,id|unique:user_preferences,user_id,' . $id;
-        
+        // user_id is derived from auth session, no need to validate on update
+        unset($rules['user_id']);
+        // require start time if end time is provided, and ensure it's before end
+        $rules['lunch_break_start_time'] = 'date_format:H:i:s|required_with:lunch_break_end_time|before:lunch_break_end_time';
+        // require end time if start time is provided, and ensure it's after start
+        $rules['lunch_break_end_time'] = 'date_format:H:i:s|required_with:lunch_break_start_time|after:lunch_break_start_time';
         return $rules;
     }
 
