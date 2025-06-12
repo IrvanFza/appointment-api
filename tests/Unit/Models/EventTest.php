@@ -4,6 +4,7 @@ namespace Tests\Unit\Models;
 
 use App\Models\Event;
 use App\Models\Location;
+use App\Models\Schedule;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -22,6 +23,15 @@ class EventTest extends TestCase
     {
         $event = Event::factory()->create();
         $this->assertInstanceOf(Location::class, $event->location);
+    }
+
+    public function test_has_many_schedules(): void
+    {
+        $event = Event::factory()->create();
+        Schedule::factory()->count(3)->create(['event_id' => $event->id]);
+        
+        $this->assertCount(3, $event->schedules);
+        $this->assertInstanceOf(Schedule::class, $event->schedules->first());
     }
 
     public function test_has_validation_rules(): void

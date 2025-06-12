@@ -6,10 +6,10 @@ use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Event extends Model
+class Schedule extends Model
 {
+    /** @use HasFactory<\Database\Factories\ScheduleFactory> */
     use HasFactory, HasUuid;
 
     /**
@@ -19,11 +19,12 @@ class Event extends Model
      */
     protected $fillable = [
         'user_id',
-        'name',
-        'location_id',
-        'location_value',
-        'duration_mins',
-        'max_appointment_days',
+        'event_id',
+        'start_time',
+        'end_time',
+        'client_name',
+        'client_email',
+        'status',
     ];
 
     /**
@@ -32,8 +33,8 @@ class Event extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'duration_mins' => 'integer',
-        'max_appointment_days' => 'integer',
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
@@ -47,11 +48,12 @@ class Event extends Model
     {
         return [
             'user_id' => ['required', 'uuid', 'exists:users,id'],
-            'name' => ['required', 'string', 'max:255'],
-            'location_id' => ['required', 'uuid', 'exists:locations,id'],
-            'location_value' => ['required', 'string', 'max:255'],
-            'duration_mins' => ['required', 'integer', 'min:1'],
-            'max_appointment_days' => ['nullable', 'integer', 'min:1'],
+            'event_id' => ['required', 'uuid', 'exists:events,id'],
+            'start_time' => ['required', 'date'],
+            'end_time' => ['required', 'date', 'after:start_time'],
+            'client_name' => ['required', 'string', 'max:255'],
+            'client_email' => ['required', 'email', 'max:254'],
+            'status' => ['required', 'string', 'max:50', 'in:confirmed,cancelled'],
         ];
     }
 
@@ -60,16 +62,8 @@ class Event extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function location(): BelongsTo
+    public function event(): BelongsTo
     {
-        return $this->belongsTo(Location::class);
-    }
-
-    /**
-     * Get the schedules for the event.
-     */
-    public function schedules(): HasMany
-    {
-        return $this->hasMany(Schedule::class);
+        return $this->belongsTo(Event::class);
     }
 }

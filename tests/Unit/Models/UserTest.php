@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Models;
 
+use App\Models\Schedule;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
@@ -205,5 +206,14 @@ class UserTest extends TestCase
         $user->refresh();
         $this->assertInstanceOf(\App\Models\UserPreference::class, $user->preference);
         $this->assertEquals($preference->id, $user->preference->id);
+    }
+
+    public function test_user_has_many_schedules(): void
+    {
+        $user = User::factory()->create();
+        Schedule::factory()->count(3)->create(['user_id' => $user->id]);
+        
+        $this->assertCount(3, $user->schedules);
+        $this->assertInstanceOf(Schedule::class, $user->schedules->first());
     }
 } 
