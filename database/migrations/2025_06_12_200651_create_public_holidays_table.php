@@ -15,7 +15,8 @@ return new class extends Migration
             $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
             $table->string('name', 100);
             $table->date('date')->unique();
-            $table->timestamps();
+            $table->timestampTz('created_at')->default(DB::raw('now()'));
+            $table->timestampTz('updated_at')->default(DB::raw('now()'));
         });
     }
 

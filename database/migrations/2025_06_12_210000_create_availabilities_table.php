@@ -18,7 +18,8 @@ return new class extends Migration
             $table->integer('day_of_week');
             $table->time('start_time');
             $table->time('end_time');
-            $table->timestamps();
+            $table->timestampTz('created_at')->default(DB::raw('now()'));
+            $table->timestampTz('updated_at')->default(DB::raw('now()'));
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->index('user_id');

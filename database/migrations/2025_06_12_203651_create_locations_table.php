@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('locations', function (Blueprint $table) {
             $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
             $table->string('name', 255)->unique();
-            $table->timestampsTz();
+            $table->timestampTz('created_at')->default(DB::raw('now()'));
+            $table->timestampTz('updated_at')->default(DB::raw('now()'));
         });
     }
 
