@@ -6,6 +6,7 @@ use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
 class Schedule extends Model
 {
@@ -25,6 +26,7 @@ class Schedule extends Model
         'client_name',
         'client_email',
         'status',
+        'serial',
     ];
 
     /**
@@ -38,6 +40,32 @@ class Schedule extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($schedule) {
+            $schedule->serial = $schedule->serial ?? self::generateSerial();
+        });
+    }
+
+    /**
+     * Generate a unique serial for the schedule.
+     *
+     * @return string
+     */
+    public static function generateSerial(): string
+    {
+        $serial = 'SCH-' . strtoupper(Str::random(8));
+        
+        // Ensure the serial is unique
+        while (self::where('serial', $serial)->exists()) {
+            $serial = 'SCH-' . strtoupper(Str::random(8));
+        }
+        
+        return $serial;
+    }
 
     /**
      * Get the validation rules for the model.

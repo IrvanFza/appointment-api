@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AvailabilityController;
 use App\Http\Controllers\Api\EventController;
+use App\Http\Controllers\Api\ScheduleController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\UserPreferenceController;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('auth/login', [AuthController::class, 'login']);
+
+Route::post('schedules', [ScheduleController::class, 'store']);
+Route::get('schedules/{id}', [ScheduleController::class, 'show']);
+Route::put('schedules/{id}', [ScheduleController::class, 'update']);
+Route::post('schedules/{id}/cancel', [ScheduleController::class, 'cancel']);
 
 // All routes with authentication
 Route::middleware('auth:api')->group(function () {
