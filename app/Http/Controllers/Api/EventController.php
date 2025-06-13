@@ -9,9 +9,6 @@ use Illuminate\Support\Str;
 
 class EventController extends BaseController
 {
-    /**
-     * Display a listing of the events.
-     */
     public function index(Request $request): JsonResponse
     {
         $query = auth('api')->user()->events();
@@ -19,9 +16,9 @@ class EventController extends BaseController
         if ($request->has('name')) {
             $query->where('name', 'like', '%' . $request->name . '%');
         }
-        
-        // TODO: Add more filters or sorting
-        
+
+        // TODO: Add more filters or sorting if needed
+
         // Paginate the results
         $perPage = $request->get('per_page', 10);
         $events = $query->paginate($perPage);
@@ -40,9 +37,6 @@ class EventController extends BaseController
         );
     }
 
-    /**
-     * Store a newly created event.
-     */
     public function store(Request $request): JsonResponse
     {
         $rules = Event::validationRules();
@@ -66,9 +60,6 @@ class EventController extends BaseController
         );
     }
 
-    /**
-     * Display the specified event.
-     */
     public function show(string $id): JsonResponse
     {
         if (!Str::isUuid($id)) {
@@ -91,9 +82,6 @@ class EventController extends BaseController
         );
     }
 
-    /**
-     * Update the specified event.
-     */
     public function update(Request $request, string $id): JsonResponse
     {
         if (!Str::isUuid($id)) {
@@ -129,9 +117,6 @@ class EventController extends BaseController
         );
     }
 
-    /**
-     * Remove the specified event.
-     */
     public function destroy(string $id): JsonResponse
     {
         if (!Str::isUuid($id)) {

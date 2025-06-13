@@ -9,9 +9,6 @@ use Illuminate\Support\Str;
 
 class AvailabilityController extends BaseController
 {
-    /**
-     * Display a listing of the availabilities.
-     */
     public function index(): JsonResponse
     {
         $availabilities = auth('api')->user()->availabilities()->orderBy('day_of_week')->orderBy('start_time')->get();
@@ -22,9 +19,6 @@ class AvailabilityController extends BaseController
         );
     }
 
-    /**
-     * Store a newly created availability.
-     */
     public function store(Request $request): JsonResponse
     {
         $rules = Availability::validationRules();
@@ -48,9 +42,6 @@ class AvailabilityController extends BaseController
         );
     }
 
-    /**
-     * Display the specified availability.
-     */
     public function show(string $id): JsonResponse
     {
         if (!Str::isUuid($id)) {
@@ -73,9 +64,6 @@ class AvailabilityController extends BaseController
         );
     }
 
-    /**
-     * Update the specified availability.
-     */
     public function update(Request $request, string $id): JsonResponse
     {
         if (!Str::isUuid($id)) {
@@ -117,9 +105,6 @@ class AvailabilityController extends BaseController
         );
     }
 
-    /**
-     * Remove the specified availability.
-     */
     public function destroy(string $id): JsonResponse
     {
         if (!Str::isUuid($id)) {

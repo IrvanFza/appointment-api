@@ -2,21 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends BaseController
 {
-
-    public function __construct()
-    {
-        // Middleware is now handled at the route level in Laravel 11
-    }
-
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -25,7 +15,7 @@ class AuthController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendValidationError($validator->errors());
+            return $this->sendValidationError($validator->errors()->toArray());
         }
 
         $credentials = $request->only('email', 'password');
