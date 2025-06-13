@@ -40,6 +40,7 @@ class EventControllerTest extends TestCase
         $event1 = Event::create([
             'user_id' => $this->user->id,
             'name' => 'Event 1',
+            'slug' => 'event-1',
             'location_id' => $this->location->id,
             'location_value' => 'Room 1',
             'duration_mins' => 60,
@@ -49,6 +50,7 @@ class EventControllerTest extends TestCase
         $event2 = Event::create([
             'user_id' => $this->user->id,
             'name' => 'Event 2',
+            'slug' => 'event-2',
             'location_id' => $this->location->id,
             'location_value' => 'Room 2',
             'duration_mins' => 30,
@@ -60,6 +62,7 @@ class EventControllerTest extends TestCase
         Event::create([
             'user_id' => $otherUser->id,
             'name' => 'Other Event',
+            'slug' => 'other-event',
             'location_id' => $this->location->id,
             'location_value' => 'Room 3',
             'duration_mins' => 45,
@@ -108,6 +111,7 @@ class EventControllerTest extends TestCase
         $event1 = Event::create([
             'user_id' => $this->user->id,
             'name' => 'Meeting with Client',
+            'slug' => 'meeting-with-client',
             'location_id' => $this->location->id,
             'location_value' => 'Room 1',
             'duration_mins' => 60,
@@ -117,6 +121,7 @@ class EventControllerTest extends TestCase
         $event2 = Event::create([
             'user_id' => $this->user->id,
             'name' => 'Team Workshop',
+            'slug' => 'team-workshop',
             'location_id' => $this->location->id,
             'location_value' => 'Room 2',
             'duration_mins' => 120,
@@ -141,6 +146,7 @@ class EventControllerTest extends TestCase
             Event::create([
                 'user_id' => $this->user->id,
                 'name' => "Event $i",
+                'slug' => "event-$i",
                 'location_id' => $this->location->id,
                 'location_value' => "Room $i",
                 'duration_mins' => 30,
@@ -217,6 +223,7 @@ class EventControllerTest extends TestCase
         $response->assertStatus(201);
         $response->assertJsonFragment([
             'name' => 'New Event',
+            'slug' => 'new-event',
             'location_value' => 'Room 101',
             'duration_mins' => 45,
             'max_appointment_days' => 14,
@@ -225,6 +232,7 @@ class EventControllerTest extends TestCase
         $this->assertDatabaseHas('events', [
             'user_id' => $this->user->id,
             'name' => 'New Event',
+            'slug' => 'new-event',
         ]);
     }
 
@@ -250,6 +258,7 @@ class EventControllerTest extends TestCase
         $event = Event::create([
             'user_id' => $this->user->id,
             'name' => 'Test Event',
+            'slug' => 'test-event',
             'location_id' => $this->location->id,
             'location_value' => 'Room 200',
             'duration_mins' => 60,
@@ -264,6 +273,7 @@ class EventControllerTest extends TestCase
         $response->assertJsonFragment([
             'id' => $event->id,
             'name' => 'Test Event',
+            'slug' => 'test-event',
             'location_value' => 'Room 200',
             'duration_mins' => 60,
             'max_appointment_days' => 30,
@@ -287,6 +297,7 @@ class EventControllerTest extends TestCase
         $event = Event::create([
             'user_id' => $otherUser->id,
             'name' => 'Other User Event',
+            'slug' => 'other-user-event',
             'location_id' => $this->location->id,
             'location_value' => 'Room 300',
             'duration_mins' => 30,
@@ -305,6 +316,7 @@ class EventControllerTest extends TestCase
         $event = Event::create([
             'user_id' => $this->user->id,
             'name' => 'Original Event',
+            'slug' => 'original-event',
             'location_id' => $this->location->id,
             'location_value' => 'Room 400',
             'duration_mins' => 60,
@@ -313,6 +325,7 @@ class EventControllerTest extends TestCase
 
         $data = [
             'name' => 'Updated Event',
+            'slug' => 'updated-event',
             'location_value' => 'Room 401',
             'duration_mins' => 45,
             'max_appointment_days' => 14,
@@ -325,6 +338,7 @@ class EventControllerTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonFragment([
             'name' => 'Updated Event',
+            'slug' => 'updated-event',
             'location_value' => 'Room 401',
             'duration_mins' => 45,
             'max_appointment_days' => 14,
@@ -333,6 +347,7 @@ class EventControllerTest extends TestCase
         $this->assertDatabaseHas('events', [
             'id' => $event->id,
             'name' => 'Updated Event',
+            'slug' => 'updated-event',
             'location_value' => 'Room 401',
         ]);
     }
@@ -342,6 +357,7 @@ class EventControllerTest extends TestCase
         $event = Event::create([
             'user_id' => $this->user->id,
             'name' => 'Original Event',
+            'slug' => 'original-event',
             'location_id' => $this->location->id,
             'location_value' => 'Room 500',
             'duration_mins' => 60,
@@ -353,11 +369,13 @@ class EventControllerTest extends TestCase
             'Authorization' => 'Bearer ' . $this->token,
         ])->putJson('/api/events/' . $event->id, [
             'name' => 'Renamed Event',
+            'slug' => 'renamed-event',
         ]);
 
         $response->assertStatus(200);
         $response->assertJsonFragment([
             'name' => 'Renamed Event',
+            'slug' => 'renamed-event',
             'location_value' => 'Room 500',
         ]);
 
@@ -371,6 +389,7 @@ class EventControllerTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonFragment([
             'name' => 'Renamed Event',
+            'slug' => 'renamed-event',
             'duration_mins' => 90,
         ]);
     }
@@ -381,6 +400,7 @@ class EventControllerTest extends TestCase
         $event = Event::create([
             'user_id' => $otherUser->id,
             'name' => 'Other User Event',
+            'slug' => 'other-user-event',
             'location_id' => $this->location->id,
             'location_value' => 'Room 600',
             'duration_mins' => 30,
@@ -403,6 +423,7 @@ class EventControllerTest extends TestCase
         $event = Event::create([
             'user_id' => $this->user->id,
             'name' => 'Event to Delete',
+            'slug' => 'event-to-delete',
             'location_id' => $this->location->id,
             'location_value' => 'Room 700',
             'duration_mins' => 60,
@@ -425,6 +446,7 @@ class EventControllerTest extends TestCase
         $event = Event::create([
             'user_id' => $otherUser->id,
             'name' => 'Other User Event',
+            'slug' => 'other-user-event',
             'location_id' => $this->location->id,
             'location_value' => 'Room 800',
             'duration_mins' => 30,

@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class Event extends Model
 {
@@ -20,6 +22,7 @@ class Event extends Model
     protected $fillable = [
         'user_id',
         'name',
+        'slug',
         'location_id',
         'location_value',
         'duration_mins',
@@ -38,6 +41,61 @@ class Event extends Model
         'updated_at' => 'datetime',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($event) {
+            if (empty($event->slug)) {
+                $event->slug = $event->generateUniqueSlug($event->name);
+            }
+        });
+
+        static::updating(function ($event) {
+            if ($event->isDirty('name') && !$event->isDirty('slug')) {
+                $event->slug = $event->generateUniqueSlug($event->name);
+            }
+        });
+    }
+
+    /**
+     * Generate a unique slug for the event.
+     *
+     * @param string $name
+     * @return string
+     */
+    protected function generateUniqueSlug(string $name): string
+    {
+        $slug = Str::slug($name);
+        $originalSlug = $slug;
+        $count = 1;
+
+        // Check if the slug already exists for this user
+        while ($this->slugExists($slug)) {
+            $slug = $originalSlug . '-' . $count++;
+        }
+
+        return $slug;
+    }
+
+    /**
+     * Check if a slug already exists for the current user.
+     *
+     * @param string $slug
+     * @return bool
+     */
+    protected function slugExists(string $slug): bool
+    {
+        $query = static::where('slug', $slug)
+            ->where('user_id', $this->user_id);
+        
+        if ($this->exists) {
+            $query->where('id', '!=', $this->id);
+        }
+        
+        return $query->exists();
+    }
+
     /**
      * Get the validation rules for the model.
      *
@@ -48,6 +106,13 @@ class Event extends Model
         return [
             'user_id' => ['required', 'uuid', 'exists:users,id'],
             'name' => ['required', 'string', 'max:255'],
+            'slug' => [
+                'string',
+                'max:255',
+                Rule::unique('events')->where(function ($query) {
+                    return $query->where('user_id', request()->user_id);
+                }),
+            ],
             'location_id' => ['required', 'uuid', 'exists:locations,id'],
             'location_value' => ['required', 'string', 'max:255'],
             'duration_mins' => ['required', 'integer', 'min:1'],

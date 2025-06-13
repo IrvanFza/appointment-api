@@ -68,4 +68,57 @@ class EventTest extends TestCase
         $this->assertEquals('integer', $casts['duration_mins']);
         $this->assertEquals('integer', $casts['max_appointment_days']);
     }
+
+    public function test_slug_is_automatically_generated(): void
+    {
+        $event = Event::create([
+            'user_id' => User::factory()->create()->id,
+            'name' => 'Test Event Name',
+            'location_id' => Location::factory()->create()->id,
+            'location_value' => 'Test Location',
+            'duration_mins' => 60,
+        ]);
+
+        $this->assertEquals('test-event-name', $event->slug);
+
+        // Test that slug is updated when name changes
+        $event->update(['name' => 'Updated Event Name']);
+        $this->assertEquals('updated-event-name', $event->slug);
+    }
+
+    public function test_slug_is_unique_within_user_scope(): void
+    {
+        $user = User::factory()->create();
+        
+        $event1 = Event::create([
+            'user_id' => $user->id,
+            'name' => 'Same Name',
+            'location_id' => Location::factory()->create()->id,
+            'location_value' => 'Test Location 1',
+            'duration_mins' => 60,
+        ]);
+
+        $event2 = Event::create([
+            'user_id' => $user->id,
+            'name' => 'Same Name',
+            'location_id' => Location::factory()->create()->id,
+            'location_value' => 'Test Location 2',
+            'duration_mins' => 30,
+        ]);
+
+        $this->assertEquals('same-name', $event1->slug);
+        $this->assertEquals('same-name-1', $event2->slug);
+
+        // Test that different users can have same slug
+        $otherUser = User::factory()->create();
+        $event3 = Event::create([
+            'user_id' => $otherUser->id,
+            'name' => 'Same Name',
+            'location_id' => Location::factory()->create()->id,
+            'location_value' => 'Test Location 3',
+            'duration_mins' => 45,
+        ]);
+
+        $this->assertEquals('same-name', $event3->slug);
+    }
 } 
