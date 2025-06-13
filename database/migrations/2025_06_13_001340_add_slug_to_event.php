@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('events', function (Blueprint $table) {
             $table->string('slug');
+            $table->index('slug');
             $table->unique(['slug', 'user_id']);
         });
     }
