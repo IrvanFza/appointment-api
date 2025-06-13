@@ -18,14 +18,7 @@ class LocationFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->randomElement([
-                'Google Meet',
-                'Zoom',
-                'Microsoft Teams',
-                'Offline',
-                'Phone Call',
-                $this->faker->word(),
-            ]),
+            'name' => $this->faker->unique()->words(2, true) . ' ' . $this->faker->randomNumber(3),
         ];
     }
 } 
