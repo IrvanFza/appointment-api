@@ -23,7 +23,7 @@ class UserTest extends TestCase
     public function test_user_has_correct_fillable_attributes(): void
     {
         $user = new User();
-        $expected = ['name', 'email', 'password'];
+        $expected = ['name', 'username', 'email', 'password'];
         
         $this->assertEquals($expected, $user->getFillable());
     }
@@ -59,6 +59,7 @@ class UserTest extends TestCase
     {
         $user = User::create([
             'name' => 'Test User',
+            'username' => 'testuser',
             'email' => 'test@example.com',
             'password' => 'password123'
         ]);
@@ -74,6 +75,7 @@ class UserTest extends TestCase
         $user = User::create([
             'id' => $customUuid,
             'name' => 'Test User',
+            'username' => 'testuser',
             'email' => 'test@example.com',
             'password' => 'password123'
         ]);
@@ -90,6 +92,7 @@ class UserTest extends TestCase
         
         $user = User::create([
             'name' => 'Test User',
+            'username' => 'testuser',
             'email' => 'test@example.com',
             'password' => $plainPassword
         ]);

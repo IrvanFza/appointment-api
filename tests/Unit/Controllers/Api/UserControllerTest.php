@@ -15,6 +15,7 @@ class UserControllerTest extends TestCase
     {
         $user = User::create([
             'name' => 'Test User',
+            'username' => 'testuser',
             'email' => 'test@example.com',
             'password' => Hash::make('password'),
         ]);
@@ -31,7 +32,8 @@ class UserControllerTest extends TestCase
                      'message' => 'User profile fetched successfully',
                      'data' => [
                          'email' => 'test@example.com',
-                         'name' => 'Test User'
+                         'name' => 'Test User',
+                         'username' => 'testuser'
                      ]
                  ])
                  ->assertJsonStructure([
@@ -40,6 +42,7 @@ class UserControllerTest extends TestCase
                      'data' => [
                          'id',
                          'name',
+                         'username',
                          'email',
                          'created_at',
                          'updated_at'
@@ -85,6 +88,7 @@ class UserControllerTest extends TestCase
     {
         $user = User::create([
             'name' => 'Test User',
+            'username' => 'testuser',
             'email' => 'test@example.com',
             'password' => Hash::make('password'),
         ]);

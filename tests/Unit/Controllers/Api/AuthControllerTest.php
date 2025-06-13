@@ -15,6 +15,7 @@ class AuthControllerTest extends TestCase
     {
         $user = User::create([
             'name' => 'Test User',
+            'username' => 'testuser',
             'email' => 'test@example.com',
             'password' => Hash::make('password'),
         ]);
@@ -51,6 +52,7 @@ class AuthControllerTest extends TestCase
     {
         $user = User::create([
             'name' => 'Test User',
+            'username' => 'testuser',
             'email' => 'test@example.com',
             'password' => Hash::make('password'),
         ]);
